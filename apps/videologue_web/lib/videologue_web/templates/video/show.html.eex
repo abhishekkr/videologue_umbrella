@@ -1,0 +1,32 @@
+<h1>Show Video</h1>
+
+<div><%= link "Watch🔗", to: Routes.watch_path(@conn, :show, @video), title: "Link", class: "button" %></div>
+
+<ul>
+
+  <li>
+    <strong>Url:</strong>
+    <a href="<%= @video.url %>"><%= @video.url %></a>
+  </li>
+
+  <li>
+    <strong>Title:</strong>
+    <%= @video.title %>
+  </li>
+
+  <li>
+    <strong>Description:</strong>
+    <%= @video.description %>
+  </li>
+
+  <%= if @video.category do %>
+  <li>
+    <strong>Category:</strong>
+    <%= @video.category.name %>
+  </li>
+  <% end %>
+
+</ul>
+
+<span><%= link "Edit", to: Routes.video_path(@conn, :edit, @video) %></span> |
+<span><%= link "Back", to: Routes.video_path(@conn, :index) %></span>
