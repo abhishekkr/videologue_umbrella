@@ -22,3 +22,5 @@ config :videologue_web, VideologueWeb.Endpoint,
 config :logger, level: :warn
 
 config :videologue, phoenix_token_salt: "user_socket_salt"
+
+config :pbkdf2_elixir, :rounds, 1
