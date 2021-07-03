@@ -42,3 +42,7 @@ config :videologue_web, VideologueWeb.Endpoint,
 
 phoenix_token_salt = System.get_env("PHOENIX_TOKEN_SALT") ||
 config :videologue, phoenix_token_salt: phoenix_token_salt
+
+wolfram_app_id = System.get_env("WOLFRAM_APP_ID") ||
+ raise """missing env var: WOLFRAM_APP_ID"""
+config :nfo, :wolfram, app_id: wolfram_app_id

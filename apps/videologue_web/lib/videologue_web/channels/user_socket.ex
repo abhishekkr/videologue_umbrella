@@ -15,7 +15,7 @@ defmodule VideologueWeb.UserSocket do
       max_age: @max_token_age
     ) |> do_connect(socket)
   end
-  def connect(_params, socket, _connect_info), do: :error
+  def connect(_params, _socket, _connect_info), do: :error
 
   @impl true
   def id(_socket), do: nil
@@ -23,7 +23,5 @@ defmodule VideologueWeb.UserSocket do
   defp do_connect({:ok, user_id}, socket) do
     {:ok, assign(socket, :user_id, user_id)}
   end
-  defp do_connect({:error, reason}, _socket) do
-    :error
-  end
+  defp do_connect({:error, _reason}, _socket), do: :error
 end

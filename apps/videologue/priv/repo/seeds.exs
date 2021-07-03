@@ -19,4 +19,15 @@ defmodule Seeds.Multimedia.Category do
   end
 end
 
+defmodule Seeds.Accounts.User do
+  def add_backend do
+    for user <- ~w(wolfram) do
+      {:ok, _} = Videologue.Accounts.create_user(%{
+        name: String.capitalize(user), username: user
+      })
+    end
+  end
+end
+
 Seeds.Multimedia.Category.add_default()
+Seeds.Accounts.User.add_backend()

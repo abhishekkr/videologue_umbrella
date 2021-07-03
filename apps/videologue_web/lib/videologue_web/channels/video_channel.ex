@@ -35,11 +35,11 @@ defmodule VideologueWeb.VideoChannel do
     user = Accounts.get_user!(socket.assigns.user_id)
     do_handle_in(event, params, user, socket)
   end
-
   defp do_handle_in("new_annotation", params, user, socket) do
     Multimedia.annotate_video(user, socket.assigns.video_id, params)
     |> do_new_annoation(user, socket)
   end
+
   defp do_new_annoation({:ok, annotation}, user, socket) do
     broadcast!(socket, "new_annotation", %{
       id: annotation.id,
@@ -47,9 +47,29 @@ defmodule VideologueWeb.VideoChannel do
       body: annotation.body,
       at: annotation.at
     })
+    Task.start(fn -> compute_additional_info(annotation, socket) end)
     {:reply, :ok, socket}
   end
   defp do_new_annoation({:error, changeset}, _user, socket) do
     {:reply, {:error, %{errors: changeset}}, socket}
   end
+
+  defp compute_additional_info(annotation, socket) do
+    for result <- Nfo.compute(annotation.body, limit: 1, timeout: 10_000) do
+      backend_user = Accounts.get_user_by(username: result.backend.name())
+      attrs = %{body: result.text, at: annotation.at}
+      Multimedia.annotate_video(backend_user, annotation.video_id, attrs)
+      |> do_auto_annotation(backend_user, socket)
+    end
+  end
+
+  defp do_auto_annotation({:ok, nfo_annotation}, user, socket) do
+    broadcast!(socket, "new_annotation", %{
+      id: nfo_annotation.id,
+      user: VideologueWeb.UserView.render("user.json", %{user: user}),
+      body: nfo_annotation.body,
+      at: nfo_annotation.at
+    })
+  end
+  defp do_auto_annotation({:error, _changeset}, _user, _socket), do: :ignore
 end

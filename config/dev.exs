@@ -76,3 +76,6 @@ config :phoenix, :plug_init_mode, :runtime
 config :phoenix, :stacktrace_depth, 20
 
 config :videologue, phoenix_token_salt: "user_socket_salt"
+
+wolfram_app_id = System.get_env("WOLFRAM_APP_ID", "DEV WOLFRAM APP ID here")
+config :nfo, :wolfram, app_id: wolfram_app_id
