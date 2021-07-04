@@ -1,7 +1,6 @@
 <section class="phx-hero">
-  <h1><%= gettext "Welcome to %{name}!", name: "Video.logue" %></h1>
-  <p>Start the videologue..</p>
-  <div>
+  <h3 class="onright"><i><%= gettext "Start the %{name}!", name: "Video.logue" %></i></h3>
+  <div class="onleft">
     <ul>
       <li><a href="/my/videos">My Videos</a></li>
     </ul>

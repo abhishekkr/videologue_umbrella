@@ -1,3 +1,10 @@
+.onleft{
+  text-align: left;
+}
+.onright{
+  text-align: right;
+}
+
 .annotations{
   border-left: 1px solid #eaeaea;
 }
