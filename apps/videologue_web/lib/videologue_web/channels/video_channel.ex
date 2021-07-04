@@ -4,6 +4,8 @@ defmodule VideologueWeb.VideoChannel do
   alias Videologue.{Accounts,Multimedia}
   alias VideologueWeb.AnnotationView
 
+  @check_presence Application.get_env(:videologue_web, :check_presence, true)
+
   def join("videos:" <> video_id, params, socket) do
     send(self(), :after_join)
     # :timer.send_interval(5_000, :ping) # is just for simple use-case, can be cleaned up
@@ -24,10 +26,12 @@ defmodule VideologueWeb.VideoChannel do
   end
 
   def handle_info(:after_join, socket) do
-    push(socket, "presence_state", VideologueWeb.Presence.list(socket))
-    {:ok, _} = VideologueWeb.Presence.track(socket,
-      socket.assigns.user_id,
-      %{device: "browser"})
+    if @check_presence do
+      push(socket, "presence_state", VideologueWeb.Presence.list(socket))
+      {:ok, _} = VideologueWeb.Presence.track(socket,
+        socket.assigns.user_id,
+        %{device: "browser"})
+    end
     {:noreply, socket}
   end
 

@@ -5,6 +5,7 @@ defmodule Nfo.Wolfram do
 
   @behaviour Nfo.Backend
 
+  @http_client Application.get_env(:nfo, :wolfram)[:http_client] || :httpc
   @base "https://api.wolframalpha.com/v2/query"
   @xpath_pod_title "contains(@title, 'Result') or
     contains(@title, 'Definitions') or
@@ -21,11 +22,6 @@ defmodule Nfo.Wolfram do
     |> build_results()
   end
 
-  defp tee(x) do
-    IO.puts "#{inspect x}"
-    x
-  end
-
   defp build_results(nil), do: []
   defp build_results(answer) do
     [%Result{backend: __MODULE__, score: 95, text: to_string(answer)}]
@@ -34,9 +30,8 @@ defmodule Nfo.Wolfram do
   defp fetch_xml(query) do
     {:ok, {_,_,body}} = query
                         |> url()
-    |> tee()
                         |> String.to_charlist()
-                        |> :httpc.request()
+                        |> @http_client.request()
     body
   end
 

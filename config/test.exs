@@ -24,3 +24,9 @@ config :logger, level: :warn
 config :videologue, phoenix_token_salt: "user_socket_salt"
 
 config :pbkdf2_elixir, :rounds, 1
+
+config :nfo, :wolfram,
+  app_id: "testx",
+  http_client: Nfo.Test.HTTPClient
+
+config :videologue_web, check_presence: false
